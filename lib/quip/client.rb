@@ -1,4 +1,5 @@
-require 'unirest'
+require 'rest-client'
+require 'JSON'
 
 module Quip
   class QuipClient
@@ -70,20 +71,13 @@ module Quip
     end
 
     def get_json(path)
-      response = Unirest.get("#{base_url}/#{path}", headers: {
-        'Authorization' => "Bearer #{access_token}"
-      })
-
-      response.body
+      response = RestClient.get "#{base_url}/#{path}", {Authorization: "Bearer  #{access_token}"}
+      JSON.parse(response.body)
     end
 
     def post_json(path, data)
-      response = Unirest.post("#{base_url}/#{path}", headers: {
-        'Authorization' => "Bearer #{access_token}" }, 
-        parameters: data
-      )
-
-      response.body
+      response = RestClient.post "#{base_url}/#{path}", data, {Authorization: "Bearer  #{access_token}"}
+      JSON.parse(response.body)
     end
   end
 end
