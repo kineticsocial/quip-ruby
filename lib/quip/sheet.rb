@@ -28,7 +28,7 @@ module Quip
           
           row.children.each_with_index.each do |col, j|
             col.css("br").each{ |br| br.replace "\n" }
-            _row.columns[header_keys[j]] = Quip::Sheet::Cell.new({
+            _row.columns[header_keys[j].to_sym] = Quip::Sheet::Cell.new({
               text: col.text.gsub(/\n+$/, ''), 
               section_id: col.attribute('id').value,
               quip_document: _row,
