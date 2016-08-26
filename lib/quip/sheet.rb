@@ -24,7 +24,8 @@ module Quip
       }
     end
     
-    def get_rows
+    # Return rows
+    def get_rows(options = {})
       header_keys = get_header_keys
       [].tap{|a|
         quip_sheet.css("tr").each_with_index do |row, i|
@@ -42,17 +43,28 @@ module Quip
             })
           end
           
-          a << _row
+          a << _row unless (options[:no_header] && i == 0)
         end
       }
     end
     
-    def get_row_by_index(index)
-      get_rows[index].children
+    # Return row with value
+    # key header key
+    # value 
+    # sheet.find_row_by_value('fb_ad_campaign_id', '1122333')
+    def find_row_by_value(key, value)
+      get_rows.each do |r|
+        if r.columns[key] && r.columns[key].text == value
+          return r
+        end
+      end
+      
+      return nil
     end
     
-    def get_column_by_index(index, row)
-      row[index]
+    # Get row by index
+    def get_row_by_index(index)
+      get_rows[index]
     end
   end
 end

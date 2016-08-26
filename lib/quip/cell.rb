@@ -9,7 +9,8 @@ module Quip
         super
       end
       
-      def update(text)
+      def update(_text)
+        @text = _text
         edit_document(text, {
           location: Quip::Document::REPLACE_SECTION,
           section_id: section_id
