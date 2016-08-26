@@ -3,7 +3,7 @@ module Quip
     def initialize(options)
       super
     end
-  
+    
     def get_named_sheet(name)
       doc = parse_document_html
       element = doc.at_css("//*[@title='#{name}']")

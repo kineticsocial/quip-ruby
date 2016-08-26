@@ -14,6 +14,11 @@ module Quip
       @thread_id = options[:thread_id]
       @client = options[:client]
     end
+    
+    def name
+      doc = parse_document_html
+      element = doc.at_css("h1").text
+    end
   
     def create_document(content, options = {})
       @client.post_json("threads/new-document", {
