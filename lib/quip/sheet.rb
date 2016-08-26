@@ -28,12 +28,13 @@ module Quip
       header_keys = get_header_keys
       [].tap{|a|
         quip_sheet.css("tr").each_with_index do |row, i|
-          _row = Quip::Sheet::Row.new(is_header: (i == 0), thread_id: thread_id, client: client)
+          _is_header = (i == 0)
+          _row = Quip::Sheet::Row.new(is_header: _is_header, thread_id: thread_id, client: client)
           
           row.children.each_with_index.each do |col, j|
-            _row.columns[header_keys[i]] ||= [] 
-            _row.columns[header_keys[i]] << Quip::Sheet::Cell.new({
-              text: col.text.gsub(/ +/,'_'), 
+            col.css("br").each{ |br| br.replace "\n" }
+            _row.columns[header_keys[j]] = Quip::Sheet::Cell.new({
+              text: col.text.gsub(/\n+$/, ''), 
               section_id: col.attribute('id').value,
               quip_document: _row,
               thread_id: thread_id, 

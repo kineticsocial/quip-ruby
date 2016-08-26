@@ -10,7 +10,7 @@ module Quip
       end
       
       def update(text)
-        quip_spreadsheet.quip_document.edit_document(text, {
+        edit_document(text, {
           location: Quip::Document::REPLACE_SECTION,
           section_id: section_id
         })
