@@ -6,7 +6,7 @@ module Quip
   
     def get_named_sheet(name)
       doc = parse_document_html
-      element = doc.at_css(".//*[@title='#{name}']")
+      element = doc.at_css("//*[@title='#{name}']")
       Quip::Sheet.new(quip_sheet: element, thread_id: thread_id, client: client)
     end
     
