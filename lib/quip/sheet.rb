@@ -26,12 +26,14 @@ module Quip
           _is_header = (i == 0)
           _row = Quip::Sheet::Row.new(is_header: _is_header, thread_id: thread_id, client: client)
           
-          row.children.each_with_index.each do |col, j|
-            col.css("br").each{ |br| br.replace "\n" }
+          row.children.each_with_index.each do |_col, j|
+            col = _col.at_css("span")
+            text_node = col.child
+            text_node.css("br").each{ |br| br.replace "\n" }
+            text = (text_node.to_s.bytes == [226, 128, 139]) ? '' : text_node.to_s
             _row.columns[header_keys[j].to_sym] = Quip::Sheet::Cell.new({
-              text: col.text.gsub(/\n+$/, ''), 
+              text: text, 
               section_id: col.attribute('id').value,
-              quip_document: _row,
               thread_id: thread_id, 
               client: client
             })
