@@ -1,11 +1,12 @@
 module Quip
   class Sheet
     class Cell < Quip::Document
-      attr_reader :section_id, :text
+      attr_reader :section_id, :text, :node
       
       def initialize(options)
         @section_id = options[:section_id]
         @text = options[:text]
+        @node = options[:node]
         super
       end
       
