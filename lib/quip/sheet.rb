@@ -30,13 +30,12 @@ module Quip
             col = (_col.at_css("span")) ? _col.at_css("span") : _col
             next if col.attribute('id').nil?
             
+            # Clean up a tags
+            col.css("a").each{|a| a.replace a.children.text}
+            
             text_node = col.children
             text_node.css("br").each{ |br| br.replace "\n" }
-            text = if text_node.at_css("a")
-              text_node.at_css("a").children.to_s
-            else
-              text_node.to_s
-            end
+            text = text_node.to_s
             
             text = (text.bytes == [226, 128, 139]) ? '' : text
             _row.columns[header_keys[j].to_sym] = Quip::Sheet::Cell.new({
