@@ -28,6 +28,8 @@ module Quip
           
           row.children.each_with_index.each do |_col, j|
             col = (_col.at_css("span")) ? _col.at_css("span") : _col
+            next if col.attribute('id').nil?
+            
             text_node = col.children
             text_node.css("br").each{ |br| br.replace "\n" }
             text = if text_node.at_css("a")
