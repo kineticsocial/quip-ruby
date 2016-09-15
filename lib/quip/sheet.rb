@@ -82,9 +82,9 @@ module Quip
     def reload
       super
       if accessor_value.nil?
-        spreadsheet.send(accessor_method.to_s)
+        quip_sheet = spreadsheet.send(accessor_method.to_s)
       else
-        spreadsheet.send(accessor_method.to_s, accessor_value)
+        quip_sheet = spreadsheet.send(accessor_method.to_s, accessor_value)
       end
     end
     
