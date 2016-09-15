@@ -1,9 +1,12 @@
 module Quip
   class Sheet < Quip::Document
-    attr_reader :quip_sheet
+    attr_reader :quip_sheet, :spreadsheet, :accessor_method, :accessor_value
     
     def initialize(options)
       @quip_sheet = options[:quip_sheet]
+      @spreadsheet = options[:spreadsheet]
+      @accessor_method = options[:accessor_method]
+      @accessor_value = options[:accessor_value]
       super
     end
     
@@ -74,6 +77,15 @@ module Quip
     # Get row by index
     def get_row_by_index(index)
       rows[index]
+    end
+    
+    def reload
+      super
+      if accessor_value.nil?
+        spreadsheet.send(accessor_method.to_s)
+      else
+        spreadsheet.send(accessor_method.to_s, accessor_value)
+      end
     end
     
     private

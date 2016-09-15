@@ -41,6 +41,7 @@ module Quip
     
     def reload
       @document_html = nil
+      @parse_document_html = nil
       true
     end
   
