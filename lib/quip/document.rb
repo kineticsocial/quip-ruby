@@ -38,6 +38,11 @@ module Quip
         format: options.fetch(:format, 'html')
       })
     end
+    
+    def reload
+      @document_html = nil
+      true
+    end
   
     def document_html
       @document_html ||= @client.get_thread(thread_id)["html"]
