@@ -24,7 +24,12 @@ module Quip
       [].tap{|a|
         quip_sheet.css("tr").each_with_index do |row, i|
           _is_header = (i == 0)
-          _row = Quip::Sheet::Row.new(is_header: _is_header, thread_id: thread_id, client: client)
+          _row = Quip::Sheet::Row.new({
+            is_header: _is_header, 
+            thread_id: thread_id, 
+            client: client, 
+            section_id: (row.attribute('id').value rescue nil)
+          })
           
           row.children.each_with_index.each do |_col, j|
             col = (_col.at_css("span")) ? _col.at_css("span") : _col
