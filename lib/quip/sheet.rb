@@ -83,7 +83,6 @@ module Quip
       if accessor_value.nil?
         @quip_sheet = Quip::Spreadsheet.new(thread_id: thread_id, client: client).send(accessor_method.to_s).quip_sheet
       else
-        puts "setting sheet"
         @quip_sheet = Quip::Spreadsheet.new(thread_id: thread_id, client: client).send(accessor_method.to_s, accessor_value).quip_sheet
       end
     end
