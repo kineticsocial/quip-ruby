@@ -1,10 +1,9 @@
 module Quip
   class Sheet < Quip::Document
-    attr_reader :quip_sheet, :spreadsheet, :accessor_method, :accessor_value
+    attr_reader :quip_sheet, :accessor_method, :accessor_value
     
     def initialize(options)
       @quip_sheet = options[:quip_sheet]
-      @spreadsheet = options[:spreadsheet]
       @accessor_method = options[:accessor_method]
       @accessor_value = options[:accessor_value]
       super
@@ -82,9 +81,10 @@ module Quip
     def reload
       super
       if accessor_value.nil?
-        quip_sheet = spreadsheet.send(accessor_method.to_s)
+        @quip_sheet = Quip::Spreadsheet.new(thread_id: thread_id, client: client).send(accessor_method.to_s).quip_sheet
       else
-        quip_sheet = spreadsheet.send(accessor_method.to_s, accessor_value)
+        puts "setting sheet"
+        @quip_sheet = Quip::Spreadsheet.new(thread_id: thread_id, client: client).send(accessor_method.to_s, accessor_value).quip_sheet
       end
     end
     

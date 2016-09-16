@@ -8,7 +8,6 @@ module Quip
       doc = parse_document_html
       element = doc.at_css("//*[@title='#{name}']")
       Quip::Sheet.new(
-        spreadsheet: self,
         accessor_method: :get_named_sheet,
         accessor_value: name,
         quip_sheet: element, 
@@ -24,7 +23,6 @@ module Quip
     def get_first_sheet
       accessor_method = :get_first_sheet
       Quip::Sheet.new(
-        spreadsheet: self,
         accessor_method: :get_first_sheet, 
         quip_sheet: get_container("table", 0), 
         thread_id: thread_id, 
@@ -36,7 +34,6 @@ module Quip
     def get_last_sheet
       accessor_method = :get_last_sheet
       Quip::Sheet.new(
-        spreadsheet: self,
         accessor_method: :get_last_sheet, 
         quip_sheet: get_container("table", -1), 
         thread_id: thread_id, 
