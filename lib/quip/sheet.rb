@@ -30,7 +30,8 @@ module Quip
             is_header: _is_header, 
             thread_id: thread_id, 
             client: client, 
-            section_id: (row.attribute('id').value rescue nil)
+            section_id: (row.attribute('id').value rescue nil),
+            index: i
           })
           
           row.children.each_with_index.each do |_col, j|

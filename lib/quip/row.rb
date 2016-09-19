@@ -1,11 +1,12 @@
 module Quip
   class Sheet
     class Row < Quip::Document
-      attr_reader :is_header, :columns, :section_id
+      attr_reader :is_header, :columns, :section_id, :index
       
       def initialize(options)
         @section_id = options[:section_id]
         @is_header = options[:is_header] || false
+        @index = options[:index]
         @columns = {}
         super
       end
