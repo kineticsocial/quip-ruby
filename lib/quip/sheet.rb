@@ -16,9 +16,14 @@ module Quip
     
     # Dehumanize
     def header_keys
-      get_row_items(quip_sheet.at_css("tr").children).collect{|n|
+      return @header_keys unless @header_keys.nil?
+      
+      @header_keys = get_row_items(quip_sheet.at_css("tr").children).collect{|n|
         n.to_s.dup.downcase.gsub(/ +/,'_')
       }
+      
+      # Return
+      @header_keys
     end
     
     # Return rows
