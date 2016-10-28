@@ -4,7 +4,7 @@ require 'json'
 module Quip
   class QuipClient
     attr_reader :access_token, :client_id, :client_secret,
-                :base_url, :request_timeout, :thread_id
+                :base_url, :request_timeout, :thread_id, :retry_method, :retry_attempts, :retry_count
 
     def initialize(options)
       @access_token = options.fetch(:access_token)
@@ -12,6 +12,9 @@ module Quip
       @client_secret = options.fetch(:client_secret, nil)
       @base_url = options.fetch(:base_url, 'https://platform.quip.com/1')
       @request_timeout = options.fetch(:request_timeout, 10)
+      @retry_method = options[:retry_method] || :retry
+      @retry_attempts = options[:retry_attempts] || 3
+      @retry_count = 0
     end
 
     def get_authenticated_user
@@ -71,13 +74,31 @@ module Quip
     end
 
     def get_json(path)
-      response = RestClient.get "#{base_url}/#{path}", {Authorization: "Bearer  #{access_token}"}
-      JSON.parse(response.body)
+      handle_json_with_retry_method do
+        response = RestClient.get "#{base_url}/#{path}", {Authorization: "Bearer  #{access_token}"}
+        JSON.parse(response.body)
+      end
     end
 
     def post_json(path, data)
-      response = RestClient.post "#{base_url}/#{path}", data, {Authorization: "Bearer  #{access_token}"}
-      JSON.parse(response.body)
+      handle_json_with_retry_method do
+        response = RestClient.post "#{base_url}/#{path}", data, {Authorization: "Bearer  #{access_token}"}
+        JSON.parse(response.body)
+      end
+    end
+    
+    def handle_json_with_retry_method
+      begin
+        yield
+      rescue Exception => e
+        if @retry_method.to_sym == :retry && @retry_attempts > @retry_count
+          @retry_count += 1
+          sleep 0.5
+          retry
+        else
+          raise e
+        end
+      end  
     end
   end
 end
